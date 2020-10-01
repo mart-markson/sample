@@ -1,0 +1,9 @@
+Lisa kommentaar:<br>
+{% if blog is defined %}
+<input type="hidden" name="post_id" id="post_id" value="{{ blog.id }}">
+{% endif %}
+<textarea name="comment" id="async_comment"></textarea>
+<br>
+<button id="save_comment" class="btn">Save comment</button>
+<!--<button class="btn">{{ button_label|default('Save') }}</button>-->
+

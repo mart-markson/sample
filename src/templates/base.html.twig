@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}
+            <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+            <script>
+                    $( document ).ready(function() {
+
+                        $( "#save_comment" ).click(function() {
+
+                            var comment = document.getElementById('async_comment').value;
+                            var post_id = document.getElementById('post_id').value;
+
+                            $.ajax({
+                                method: "POST",
+                                url: "/comment/save",
+                                data: { comment: comment, post_id: post_id }
+                            })
+                            .done(function( response ) {
+                                    location.reload();
+                            });
+                        });
+
+                        $( ".hide_comment" ).click(function() {
+
+                            var comment_id = $(this).data("hide");
+                            var status = $(this).data("action") == 'hide' ? 0 : 1;
+
+                            $.ajax({
+                                method: "POST",
+                                url: "/comment/" + $(this).data("hide") + "/hide",
+                                data: { comment_id: comment_id, is_public: status }
+                            })
+                            .done(function( response ) {
+                                location.reload();
+                            });
+                        });
+
+                        $( ".delete_comment" ).click(function() {
+
+                            var comment_id = document.getElementById('post_id').value;
+
+                            $.ajax({
+                                method: "POST",
+                                url: "/comment/" + $(this).data("delete") + "/remove",
+                                data: { comment_id: comment_id }
+                            })
+                            .done(function( response ) {
+                                location.reload();
+                            });
+                        });
+
+                    });
+            </script>
+        {% endblock %}
+    </head>
+    <body>
+
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <a class="link" href="{{ path('app_logout') }}">Logi välja</a>
+    {% else %}
+        <a class="link" href="/login">Logi sisse</a>
+    {% endif %}
+
+    {% block body %}{% endblock %}
+
+    </body>
+</html>

@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog index{% endblock %}
+
+{% block body %}
+    <h1>Blog index</h1>
+
+     {{ include('blog/search.html.twig') }}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for blog in blogs %}
+            <tr>
+                <td>{{ blog.id }}</td>
+                <td>
+                    <a href="{{ path('blog_show', {'id': blog.id}) }}">show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('blog_edit', {'id': blog.id}) }}">edit</a>
+                    {% elseif is_granted('ROLE_USER') %}
+
+                    {% else %}
+
+                    {% endif %}
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('blog_new') }}">Create new</a>
+    {% elseif is_granted('ROLE_USER') %}
+
+    {% else %}
+
+    {% endif %}
+
+
+
+
+
+{% endblock %}

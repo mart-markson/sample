@@ -1,0 +1,60 @@
+
+
+{% block title %}Comment index{% endblock %}
+
+{% block body %}
+    <h1>Comment index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Post_id</th>
+                <th>Content</th>
+                <th>Added</th>
+                <th>Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for comment in comments %}
+            <tr>
+                <td>{{ comment.id }}</td>
+                <td>{{ comment.postId }}</td>
+                <td>{{ comment.content }}</td>
+                <td>{{ comment.added ? comment.added|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ comment.updated ? comment.updated|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    {% if is_granted('ROLE_ADMIN') %}
+
+
+                        {% if comment.public == '1' %}
+                            <a data-hide="{{ comment.id }}" data-action="hide" class="hide_comment" href="javascript:;">hide</a>
+                        {% elseif is_granted('ROLE_USER') %}
+                            <a data-hide="{{ comment.id }}" data-action="show" class="hide_comment" href="javascript:;">show</a>
+                        {% else %}
+
+                        {% endif %}
+
+
+
+                            <!--<a data-hide="{{ comment.id }}" data-action="publish" class="hide_comment" href="javascript:;">publish</a>-->
+
+                        <a data-delete="{{ comment.id }}" class="delete_comment" href="javascript:;">delete</a>
+                    {% elseif is_granted('ROLE_USER') %}
+
+
+                    {% else %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Kommentaare ei leitud</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!--<a href="{{ path('comment_new') }}">Create new</a>-->
+{% endblock %}
